@@ -2,6 +2,3 @@ streamlit
 streamlit_analytics
 pandas
 requests
-json
-datetime
-os
