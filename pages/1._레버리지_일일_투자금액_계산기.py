@@ -2,37 +2,9 @@ import streamlit as st
 import requests
 import pandas as pd
 import streamlit_analytics
-import json
-from datetime import datetime
-import os
+
 
 streamlit_analytics.start_tracking()
-
-# 방문자 수를 저장할 파일 경로
-visitors_file = "visitors.json"
-
-# 방문자 수를 로드하고 업데이트하는 함수
-def update_visitors():
-    today = datetime.now().date().isoformat()
-    if os.path.exists(visitors_file):
-        with open(visitors_file, "r") as file:
-            visitors = json.load(file)
-    else:
-        visitors = {"total": 0, "daily": {}, "last_update": None}
-    
-    # 총 방문자 수 업데이트
-    visitors["total"] += 1
-    # 오늘 날짜의 방문자 수 업데이트
-    if today in visitors["daily"]:
-        visitors["daily"][today] += 1
-    else:
-        visitors["daily"][today] = 1
-    visitors["last_update"] = today
-    
-    with open(visitors_file, "w") as file:
-        json.dump(visitors, file)
-    
-    return visitors
 
 
 def get_btc_price():
@@ -98,15 +70,6 @@ def app():
         #st.dataframe(df.style.format(formatter="{:.4f}"))  # 수정된 부분
         st.table(df)
 
-        #방문자수 확인
-        visitors = update_visitors()
-
-        # 방문자 수 표시
-        st.write(f"Total visits: {visitors['total']}")
-        if visitors["last_update"] in visitors["daily"]:
-            st.write(f"Today's visits: {visitors['daily'][visitors['last_update']]}")
-        else:
-            st.write("Today's visits: 0")
 
 if __name__ == '__main__':
     app()
