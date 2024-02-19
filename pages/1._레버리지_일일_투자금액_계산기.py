@@ -3,9 +3,7 @@ import requests
 import pandas as pd
 import streamlit_analytics
 
-
 streamlit_analytics.start_tracking()
-
 
 def get_btc_price():
     """비트코인 가격을 가져오는 함수"""
@@ -62,7 +60,8 @@ def app():
         #st.subheader(f'최종 부채 증가량 : :blue[{round(final_debt_increase_btc, 5)} BTC]')
         myltv = int((existing_debt_btc/current_assets_btc) * 100)
         st.subheader(f"현재 나의 LTV : :orange[{myltv} %]")
-        st.subheader(f"현재 자산에서 LTV 50%가 되는 BTC가격 : :red[{ltv50price} USDT]")
+        ltv50percent = int((btc_price - ltv50price) / btc_price * 100) * -1
+        st.subheader(f"현재 자산에서 LTV 50%가 되는 BTC가격 : :red[{ltv50price} USDT] (:red[{ltv50percent}%]) ")
         st.divider()
 
 
@@ -70,6 +69,7 @@ def app():
         #st.dataframe(df.style.format(formatter="{:.4f}"))  # 수정된 부분
         st.table(df)
 
+        
 
 if __name__ == '__main__':
     app()
