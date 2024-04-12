@@ -39,8 +39,8 @@ def app():
     st.header(':red[레버리지] 일일 투자금액(BTC) 계산기 :sunglasses:', divider='rainbow')
     st.subheader(f"현재 비트코인 가격 = :blue[{btc_price}] USDT")
     st.caption('특정 LTV까지 레버리지를 분할로 사용하고 싶을 때 일일 투자금액을 계산해주는 프로그램입니다. 이 프로그램에서 제공하는 데이터는 실제 데이터와 차이가 있을 수 있으니 대략적인 투자 금액을 파악하기 위한 용도로 사용하세요. ')
-    current_assets_btc = st.number_input('현재 총 자산 (BTC)', value=0.5)
-    existing_debt_btc = st.number_input('현재 총 부채 (BTC)', value=0.2)
+    current_assets_btc = st.number_input('현재 총 자산 (BTC)', value=0.5, format="%.4f")
+    existing_debt_btc = st.number_input('현재 총 부채 (BTC)', value=0.2, format="%.4f")
     target_ltv = st.number_input('목표 LTV', value=0.6, min_value=0.01, max_value=1.0, step=0.01)
     target_period = st.number_input('분할 매수 기간 (일)', value=30, min_value=1)
 
@@ -56,12 +56,12 @@ def app():
         final_debt_increase_btc, daily_investment_btc = calculate_final_debt_increase_and_daily_investment(
             current_assets_btc, existing_debt_btc, target_ltv, target_period)
         df = simulate_asset_changes(current_assets_btc, existing_debt_btc, daily_investment_btc, target_period, btc_price)
-        st.subheader(f'일일 투자금액 : :blue[{round(daily_investment_btc, 5)} BTC] (:blue[{int(daily_investment_btc * btc_price)} USDT])')
+        st.subheader(f'일일 투자금액 : :blue[{round(daily_investment_btc, 4)} BTC] (:blue[{int(daily_investment_btc * btc_price)} USDT])')
         #st.subheader(f'최종 부채 증가량 : :blue[{round(final_debt_increase_btc, 5)} BTC]')
-        myltv = int((existing_debt_btc/current_assets_btc) * 100)
-        st.subheader(f"현재 나의 LTV : :orange[{myltv} %]")
+        myltv = ((existing_debt_btc/current_assets_btc) * 100)
+        st.subheader(f"현재 나의 LTV : :orange[{myltv:.1f} %]")
         ltv50percent = int((btc_price - ltv50price) / btc_price * 100) * -1
-        st.subheader(f"현재 자산에서 LTV 50%가 되는 BTC가격 : :red[{ltv50price} USDT] (:red[{ltv50percent}%]) ")
+        st.subheader(f"현재 자산에서 LTV 50%가 되는 BTC가격 : :red[{ltv50price} USDT] (:red[{ltv50percent:.1f}%]) ")
         st.divider()
 
 
